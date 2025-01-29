@@ -59,11 +59,7 @@ app.put("/movies/:id", async (req: any, res: any) => {
   const id = Number(req.params.id);
 
   try{
-  const movie = await prisma.movie.findUnique({
-    where: {
-      id,
-    },
-  });
+  const movie = await prisma.movie.findUnique({ where: { id } });
 
   if (!movie) return res.status(404).send({message: `Filme não encontrado`})
 
@@ -82,6 +78,22 @@ app.put("/movies/:id", async (req: any, res: any) => {
 
   res.status(200).send("Informação alterada com sucesso");
 });
+
+app.delete("/movies/:id" , async (req: any , res: any) => {
+  const id = Number(req.params.id);
+  
+  try{
+  const movie = await prisma.movie.findUnique({ where: { id }})
+
+  if (!movie) return res.status(404).send({message: `Filme não encontrado`})
+
+  await prisma.movie.delete({where: { id }});
+  }catch(error){
+    return res.status(500).send({message: `Não foi possível remover o filme.`})
+  }
+
+  res.status(200).send({message: `O filme foi de base`});
+})
 
 app.listen(port, () => {
   console.log(`Servidor sendo executando em http://localhost:${port}`);
