@@ -96,11 +96,9 @@ app.delete("/movies/:id" , async (req: any , res: any) => {
 })
 
 app.get("/movies/:genreName" , async (req: any , res: any) => {
-  // receber o nome do gênero pelo parametro da rota
   const genreName = String(req.params.genreName);
 
   try{
-  //Filtrar os filmes do banco pelo gênero
   const moviesFilteredByName = await prisma.movie.findMany({
     include:{
       genres: true,
@@ -115,8 +113,7 @@ app.get("/movies/:genreName" , async (req: any , res: any) => {
       }
     }
   })
-
-  // Retornar os filmes filtrados na resposta da rota
+  
   res.status(200).send(moviesFilteredByName)
 
   }catch(error){
